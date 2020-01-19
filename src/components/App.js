@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import ContestPreview from './ContestPreview';
 
 class App extends React.Component {
 
@@ -7,27 +8,25 @@ class App extends React.Component {
     super(props);
   
     this.state = {
-      test: 42
+      contests: []
     };
   }
 
   componentDidMount() {
-    fetch('../testData.json').then(response => response.json()).then(json => {
-      console.log(json);
-    });
-  }
-
-  componentWillUnmount() {
-    console.log('will Unmount');
+    fetch('../testData.json')
+      .then(response => response.json())
+      .then(json => {
+        this.setState({ contests: json.contests });
+      });
   }
   
   render() {
     return (
-      <div>
-        <Header message="Naming Contents" />
-        <div>
-          {this.state.test}
-        </div>
+      <div className="container">
+        <Header message="Naming Contents" />        
+        {this.state.contests.map(contest => 
+          <ContestPreview {...contest} key={contest.id} />
+        )}
       </div>
     );
   }
